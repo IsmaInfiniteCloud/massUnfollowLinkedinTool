@@ -9,10 +9,15 @@ function clickUnfollowAndConfirm() {
     
     if (buttons.length > 0) {
         buttons[0].click();
-        console.log('Clicked unfollow button');
         
         setTimeout(() => {
-            // Look for a button with the text "Unfollow" and click it
+            // Grab the name of the person from the popup
+            let nameElement = document.querySelector('p[data-test-dialog-content]');
+            if (nameElement) {
+                console.log('About to unfollow:', nameElement.textContent.trim());
+            }
+            
+            // Confirm the unfollow action
             let confirmButtons = document.querySelectorAll('span.artdeco-button__text');
             for (let btn of confirmButtons) {
                 if (btn.textContent.trim() === "Unfollow") {
