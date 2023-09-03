@@ -1,43 +1,52 @@
-// Scroll every second
-let scrollInterval = setInterval(() => {
-    window.scrollTo(0, document.body.scrollHeight);
-}, 1000);
+console.log('Script started');
 
-// Click "Unfollow" and handle the confirmation dialog
+// Function to scroll down
+function scrollDown() {
+    console.log(`Scrolled to: ${window.scrollY}`);
+    window.scrollTo(0, window.scrollY + 500);
+}
+
+// Function to click the unfollow button and then confirm the unfollow action
 function clickUnfollowAndConfirm() {
-    let buttons = document.querySelectorAll('.artdeco-button--muted.artdeco-button--2.artdeco-button--secondary');
-    
-    if (buttons.length > 0) {
-        buttons[0].click();
+    console.log('Trying to find unfollow buttons...');
+
+    let unfollowButtons = document.querySelectorAll('[aria-label="Click to stop following"]');
+    if (unfollowButtons.length > 0) {
+        console.log('Found unfollow button, clicking...');
+        unfollowButtons[0].click();
         
         setTimeout(() => {
-            // Grab the name of the person from the popup
-            let nameElement = document.querySelector('p[data-test-dialog-content]');
+            console.log('Looking for name element in popup...');
+            let nameElement = document.querySelector('[data-test-dialog-content]');
             if (nameElement) {
-                console.log('About to unfollow:', nameElement.textContent.trim());
+                console.log(`Name element found: ${nameElement.textContent}`);
+            } else {
+                console.log('Name element not found in popup.');
             }
-            
-            // Confirm the unfollow action
-            let confirmButtons = document.querySelectorAll('span.artdeco-button__text');
-            for (let btn of confirmButtons) {
-                if (btn.textContent.trim() === "Unfollow") {
-                    btn.closest('button').click();
-                    console.log('Clicked confirm button');
-                    return;
-                }
+
+            console.log('Looking for confirm button in popup...');
+            let confirmButton = document.querySelector('[data-test-dialog-primary-btn]');
+            if (confirmButton) {
+                console.log('Confirm button found, clicking...');
+                confirmButton.click();
+            } else {
+                console.log('Confirm button not found.');
             }
-        }, 500); // Wait half a second for the dialog to appear
+        }, 2000);
     } else {
-        console.log('No buttons found, scrolling...');
+        console.log('No unfollow buttons found.');
     }
 }
 
-// Keep checking for "Unfollow" buttons
-let checkInterval = setInterval(clickUnfollowAndConfirm, 2000);
+// Keep scrolling down the page every 3 seconds
+let scrollInterval = setInterval(scrollDown, 3000);
 
-// Stop after running for some time, for example, 5 minutes
+// Keep checking for "Unfollow" buttons every 5 seconds
+let checkInterval = setInterval(clickUnfollowAndConfirm, 5000);
+
+// Stop after running for 5 minutes
 setTimeout(() => {
+    console.log('Stopping script...');
     clearInterval(scrollInterval);
     clearInterval(checkInterval);
-    console.log('Stopped scrolling and unfollowing');
-}, 5 * 60 * 1000);
+}, 15 * 60 * 1000);
