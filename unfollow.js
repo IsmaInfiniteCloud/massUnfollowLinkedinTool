@@ -12,12 +12,14 @@ function clickUnfollowAndConfirm() {
         console.log('Clicked unfollow button');
         
         setTimeout(() => {
-            // Assuming 'confirm-button' is the class of the "Confirm" button. 
-            // You need to replace this with the actual class or identifier of the "Confirm" button.
-            let confirmButton = document.querySelector('.confirm-button');
-            if (confirmButton) {
-                confirmButton.click();
-                console.log('Clicked confirm button');
+            // Look for a button with the text "Unfollow" and click it
+            let confirmButtons = document.querySelectorAll('span.artdeco-button__text');
+            for (let btn of confirmButtons) {
+                if (btn.textContent.trim() === "Unfollow") {
+                    btn.closest('button').click();
+                    console.log('Clicked confirm button');
+                    return;
+                }
             }
         }, 500); // Wait half a second for the dialog to appear
     } else {
